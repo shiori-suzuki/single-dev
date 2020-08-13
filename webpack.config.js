@@ -20,18 +20,17 @@ const FixStyleOnlyEntriesPlugin = require( 'webpack-fix-style-only-entries' )
 const Webpack = require( 'webpack' )
 const path = require( 'path' )
 const glob = require( 'glob' )
-let entries = {}
-
-glob.sync( `${srcDir}/**/*`, {
+const entries = glob.sync( `${srcDir}/**/*`, {
   ignore: [
     `${srcDir}/**/_*`,
     `${srcDir}/**/!(*.*)`
   ],
   cwd: srcDir
-}).map( function( file ){
-  let name = path.basename( file, path.extname(file) )
-  entries[name] = path.resolve( srcDir, file );
-})
+}).reduce((object, file) => {
+  const name = path.basename( value, path.extname(file) )
+  object[name] = value;
+  return object;
+}, {})
 
 const mode = process.env.NODE_ENV || 'development'
 const isProd =  mode === 'production'
